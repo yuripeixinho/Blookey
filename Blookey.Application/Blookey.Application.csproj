@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+		<PackageReference Include="MediatR" Version="12.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="Features\Auth\Dtos\" />
+	  <Folder Include="Features\Auth\Rules\" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Include="Common\Validation\ValidationMessages.cs" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\Blookey.Domain\Blookey.Domain.csproj" />
+	</ItemGroup>
+</Project>
