@@ -9,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Blookey.Infrastructure.Data.Auth.Services;
+namespace Blookey.Infrastructure.Data.Identity.Services;
 
 public class AuthService : IAuthService
 {
@@ -73,15 +73,16 @@ public class AuthService : IAuthService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public async Task<RegisterResponse> RegisterAsync(string name, string email, string password)
+    public async Task<RegisterResponse> RegisterAsync(RegisterRequest req)
     {
         // 1. PREPARAÇÃO DA ENTIDADE
         // Estamos mapeando os dados de entrada para a entidade do Identity.
         var user = new User
         {
-            Name = name,
-            UserName = email,       // No Identity, UserName é o identificador de login. Usamos o email.
-            Email = email,          // O email para contato/recuperação.
+            CPF = req.CPF,
+            Name = req.Name,
+            UserName = req.Email,       // No Identity, UserName é o identificador de login. Usamos o email.
+            Email = req.Email,          // O email para contato/recuperação.
            
             SecurityStamp = Guid.NewGuid().ToString()  // SecurityStamp: Garante que se o usuário mudar dados sensíveis, tokens antigos morrem.
         };
@@ -91,7 +92,7 @@ public class AuthService : IAuthService
         // A. Validações (Senha forte? Email duplicado? Caracteres inválidos?)
         // B. Hashing (Transforma "123456" em "AQAAAAEAACcQAAAA...")
         // C. Persistência (INSERT na tabela AspNetUsers)
-        var result = await _userManager.CreateAsync(user, password);
+        var result = await _userManager.CreateAsync(user, req.Password);
 
         // 3. VERIFICAÇÃO DE SUCESSO
         // O Identity não lança Exception para falhas de validação (ex: senha curta).

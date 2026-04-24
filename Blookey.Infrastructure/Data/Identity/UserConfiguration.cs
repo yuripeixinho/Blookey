@@ -12,8 +12,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.CPF)
+            .HasMaxLength(11);
+
         builder.Property(x => x.IncomeValue)
-            .HasColumnName("income_value")
             .HasColumnType("decimal(18,2)")
             .IsRequired();
     }

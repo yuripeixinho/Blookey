@@ -1,7 +1,7 @@
 ﻿using Blookey.Application.Common.Exceptions;
 using Blookey.Domain.Exceptions;
+using Blookey.Infrastructure.Integrations.Assas.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.NetworkInformation;
 
 namespace Blookey.Api.Middlewares;
 
@@ -82,6 +82,30 @@ public class GlobalExceptionMiddleware
                 Type = "https://httpstatuses.com/401"
             },
 
+            // CASO 5: Integrações Externas - Asaas
+            AssasNotFoundException assasNotFound => new ProblemDetails
+            {
+                Status = StatusCodes.Status404NotFound,
+                Title = "Asaas - Recurso não encontrado",
+                Detail = assasNotFound.ResponseBody,
+                Type = "https://httpstatuses.com/404"
+            },
+
+            AssasValidationException assasValidation => new ProblemDetails
+            {
+                Status = StatusCodes.Status422UnprocessableEntity,
+                Title = "Asaas - Dados inválidos",
+                Detail = assasValidation.ResponseBody,
+                Type = "https://httpstatuses.com/422"
+            },
+
+            AssasUnauthorizedException assasUnauthorized => new ProblemDetails
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Title = "Asaas - Credenciais inválidas",
+                Detail = assasUnauthorized.ResponseBody,
+                Type = "https://httpstatuses.com/401"
+            },
             // CASO 5: Erro genérico não tratado (Default)
             _ => new ProblemDetails
             {

@@ -1,10 +1,10 @@
-﻿using Blookey.Application.Features.Auth.Commands;
+﻿using Blookey.Application.Features.Identity.Commands.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blookey.Api.Controllers;
 
-public class AuthController : ControllerBase
+public class AuthController : ApiControllerBase
 {
     private readonly IMediator _mediator;
 
@@ -24,6 +24,16 @@ public class AuthController : ControllerBase
     public async Task<ActionResult> Register([FromBody] RegisterCommand command)
     {
         var response = await _mediator.Send(command);
-        return CreatedAtAction(nameof(Register), new { response });
+
+        return Ok(new { id = response });
     }
+
+    //[Authorize]
+    //[HttpPost("register/profile")]
+    //public async Task<ActionResult> CompleteProfile([FromBody] CompleteProfileCommand command)
+    //{
+    //    // cadastro de CPF, data de nascimento, Endereço, Telefone, etc
+
+    //    return Ok();
+    //}
 }

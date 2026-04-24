@@ -1,6 +1,6 @@
+using Blookey.Api.Ioc;
 using Blookey.Api.Middlewares;
 using Blookey.Infrastructure.Extensions;
-using Blookey.Infrastructure.Ioc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 

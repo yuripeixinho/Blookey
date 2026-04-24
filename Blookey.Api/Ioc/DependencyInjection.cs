@@ -1,21 +1,23 @@
 ﻿using Blookey.Application.Common.Behaviors;
 using Blookey.Application.Common.Interfaces;
-using Blookey.Infrastructure.Data.Auth.Services;
+using Blookey.Domain.Interfaces;
 using Blookey.Infrastructure.Data.Context;
+using Blookey.Infrastructure.Data.Identity.Services;
 using Blookey.Infrastructure.Extensions;
-using Blookey.Infrastructure.Integrations.Assas;
+using Blookey.Infrastructure.Integrations.Assas.Client;
+using Blookey.Infrastructure.Integrations.Assas.Subaccounts;
 using Blookey.Infrastructure.Integrations.Email;
+using Blookey.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Blookey.Infrastructure.Ioc;
+namespace Blookey.Api.Ioc;
 
 public static class DependencyInjection
 {
 
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<BlookeyContext>());
         services.AddDbContext<BlookeyContext>(options =>
         {
             options.UseSqlServer(
@@ -26,13 +28,20 @@ public static class DependencyInjection
 
         services.AddIdentityConfiguration(configuration);
 
+        // HTTPClients
+        services.AddHttpClient<AssasHttpClient>();
+        services.Configure<AssasClientOptions>(configuration.GetSection(AssasClientOptions.Section));
+
+
         // Repositories
-        //services.AddScoped<IPlantSpeciesRepository, PlantSpeciesRepository>();
+        services.AddScoped<IAddressRepository, AddressRepository>();
 
         // Services
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IAssasService, AssasService>();
+        services.AddScoped<IAssasSubaccountService, AssasSubaccountService>();
         services.AddScoped<IEmailService, EmailService>();
+
+
 
 
         // MediatR

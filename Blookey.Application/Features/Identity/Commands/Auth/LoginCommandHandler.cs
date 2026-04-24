@@ -1,7 +1,7 @@
 ﻿using Blookey.Application.Common.Interfaces;
 using MediatR;
 
-namespace Blookey.Application.Features.Auth.Commands;
+namespace Blookey.Application.Features.Identity.Commands.Auth;
 
 public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
 {
@@ -12,13 +12,13 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
         _authService = authService;
     }
 
-    public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<LoginResponse> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
-        var token = await _authService.LoginAsync(request.Email, request.Password);
+        var token = await _authService.LoginAsync(command.Email, command.Password);
        
         if(string.IsNullOrEmpty(token))
             throw new Exception("Credenciais inválidas"); // Ou use Notification Pattern / Result Pattern
 
-        return new LoginResponse(token, request.Email);
+        return new LoginResponse(token, command.Email);
     }
 }

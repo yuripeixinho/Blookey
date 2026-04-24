@@ -1,4 +1,4 @@
-﻿using Blookey.Application.Features.Auth.Validator;
+﻿using Blookey.Application.Features.Identity.Validator;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 

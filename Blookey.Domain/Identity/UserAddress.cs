@@ -8,21 +8,20 @@ public class UserAddress
     public string? Complement { get; set; }
     public string Province { get; set; }
     public string PostalCode { get; set; }
-    public required string UserId { get; set; }
+    public string UserId { get; set; }
 
     public User? User { get; set; }  
 
     // EF Core
     public UserAddress() { }
 
-    public UserAddress(int id, string address, string addressNumber, string? complement, string province, string postalCode, string userId)
+    public UserAddress(string address, string addressNumber, string? complement, string province, string postalCode, string userId)
     {
-        Id = id;
         Address = address;
         AddressNumber = addressNumber;  
         Complement = complement;
         Province = province;
         PostalCode = postalCode;
-        UserId = userId;
+        UserId = "ad1b578e-25d8-4aa9-a105-99c939c73bf3";
     }
 }
