@@ -1,4 +1,4 @@
-﻿using Blookey.Domain.Identity;
+﻿using Blookey.Domain.Entities.Identity;
 using Blookey.Domain.Interfaces;
 using Blookey.Infrastructure.Data.Context;
 
@@ -16,7 +16,5 @@ public class AddressRepository : IAddressRepository
     public async Task AddAsync(UserAddress address, CancellationToken cancellationToken = default)
     {
         await _context.UserAddresses.AddAsync(address, cancellationToken);
-
-
     }
 }

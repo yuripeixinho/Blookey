@@ -17,7 +17,7 @@ public class AddressController : ApiControllerBase
 
     [Authorize]
     [HttpPost("address")]
-    public async Task<ActionResult> Create([FromBody] CreateAddressCommand command)
+    public async Task<ActionResult> CreateAddress([FromBody] CreateAddressCommand command)
     {
         var response = await _mediator.Send(command);
         return Ok(response);

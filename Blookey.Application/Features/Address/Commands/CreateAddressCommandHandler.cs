@@ -1,5 +1,5 @@
 ﻿using Blookey.Application.Interfaces;
-using Blookey.Domain.Identity;
+using Blookey.Domain.Entities.Identity;
 using Blookey.Domain.Interfaces;
 using MediatR;
 

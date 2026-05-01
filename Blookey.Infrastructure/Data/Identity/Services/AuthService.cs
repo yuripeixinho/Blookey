@@ -1,7 +1,7 @@
 ﻿using Blookey.Application.Common.Exceptions;
 using Blookey.Application.Common.Interfaces;
 using Blookey.Application.Features.Identity.Dtos;
-using Blookey.Domain.Identity;
+using Blookey.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

@@ -4,6 +4,7 @@ using MediatR;
 
 namespace Blookey.Application.Features.Identity.Commands.Auth;
 
+
 public class RegisterCommandHandler : IRequestHandler<RegisterCommand, string>
 {
     private readonly IAuthService _authService;

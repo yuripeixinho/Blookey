@@ -1,9 +1,9 @@
-﻿using Blookey.Domain.Identity;
+﻿using Blookey.Domain.Entities.Identity;
 using MediatR;
 
 namespace Blookey.Application.Features.Address.Commands;
 
-public record CreateAddressCommand(
+public sealed record CreateAddressCommand(
     string Address, 
     string AddressNumber, 
     string? Complement, 

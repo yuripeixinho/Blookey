@@ -2,7 +2,7 @@
 
 namespace Blookey.Application.Features.Identity.Commands.Auth;
 
-public record RegisterCommand(
+public sealed record RegisterCommand(
     string Name,
     string CPF,
     DateTime BirthDate,

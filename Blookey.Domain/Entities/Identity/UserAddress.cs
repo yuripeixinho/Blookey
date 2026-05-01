@@ -1,4 +1,4 @@
-﻿namespace Blookey.Domain.Identity;
+﻿namespace Blookey.Domain.Entities.Identity;
 
 public class UserAddress
 {

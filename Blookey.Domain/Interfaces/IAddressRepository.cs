@@ -1,4 +1,4 @@
-﻿using Blookey.Domain.Identity;
+﻿using Blookey.Domain.Entities.Identity;
 
 namespace Blookey.Domain.Interfaces;
 

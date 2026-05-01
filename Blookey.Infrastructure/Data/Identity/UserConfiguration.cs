@@ -1,4 +1,4 @@
-﻿using Blookey.Domain.Identity;
+﻿using Blookey.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

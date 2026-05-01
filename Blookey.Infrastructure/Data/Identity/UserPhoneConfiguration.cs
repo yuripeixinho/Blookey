@@ -1,4 +1,5 @@
-﻿using Blookey.Domain.Identity;
+﻿using Blookey.Domain.Entities.Identity;
+using Blookey.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,7 +13,12 @@ public class UserPhoneConfiguration : IEntityTypeConfiguration<UserPhone>
 
         builder.HasKey(x => x.Id);
 
+        // ← Ensina o EF Core a converter PhoneNumber para string e vice-versa
         builder.Property(x => x.Phone)
+            .HasConversion(
+                phone => phone.Value,           // salva: PhoneNumber → string
+                value => PhoneNumber.Create(value) // lê: string → PhoneNumber
+            )
             .IsRequired()
             .HasMaxLength(20);
 

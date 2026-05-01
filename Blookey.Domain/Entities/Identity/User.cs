@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Blookey.Domain.Identity;
+namespace Blookey.Domain.Entities.Identity;
 
 public class User : IdentityUser
 {

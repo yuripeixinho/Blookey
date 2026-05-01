@@ -2,5 +2,5 @@
 
 namespace Blookey.Application.Features.Identity.Commands.Auth;
 
-public record LoginCommand(string Email, string Password) : IRequest<LoginResponse>;
-public record LoginResponse(string Token, string Email); 
+public sealed record LoginCommand(string Email, string Password) : IRequest<LoginResponse>;
+public sealed record LoginResponse(string Token, string Email); 

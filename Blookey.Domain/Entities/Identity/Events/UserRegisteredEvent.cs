@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Blookey.Domain.Identity.Events;
+namespace Blookey.Domain.Entities.Identity.Events;
 
 public class UserRegisteredEvent : INotification
 {

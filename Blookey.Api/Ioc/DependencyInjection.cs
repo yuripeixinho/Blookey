@@ -3,6 +3,7 @@ using Blookey.Application.Common.Interfaces;
 using Blookey.Application.Interfaces;
 using Blookey.Application.Services;
 using Blookey.Domain.Interfaces;
+using Blookey.Domain.Services;
 using Blookey.Infrastructure.Data.Context;
 using Blookey.Infrastructure.Data.Identity.Services;
 using Blookey.Infrastructure.Extensions;
@@ -38,11 +39,15 @@ public static class DependencyInjection
 
         // Repositories
         services.AddScoped<IAddressRepository, AddressRepository>();
+        services.AddScoped<IPhoneRepository, PhoneRepository>();
 
         // Services
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IAssasSubaccountService, AssasSubaccountService>();
         services.AddScoped<IEmailService, EmailService>();
+
+        // Services de domínio
+        services.AddScoped<PhoneDomainService>();
 
         // MediatR
         services.AddMediatR(cfg =>

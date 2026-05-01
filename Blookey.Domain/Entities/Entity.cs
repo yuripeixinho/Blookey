@@ -1,4 +1,4 @@
-﻿namespace Blookey.Domain.Shared;
+﻿namespace Blookey.Domain.Entities;
 
 public class Entity
 {

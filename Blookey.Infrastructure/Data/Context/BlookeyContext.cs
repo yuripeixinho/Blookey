@@ -1,4 +1,5 @@
-﻿using Blookey.Domain.Identity;
+﻿using Blookey.Domain.Entities.Identity;
+using Blookey.Domain.Enumerations;
 using Blookey.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -23,5 +24,8 @@ public class BlookeyContext : IdentityDbContext<User>, IUnitOfWork
 
         //DimBancoSeed.Seed(modelBuilder);
         //DimCodigoInscricaoSeed.Seed(modelBuilder);
+
+        Seeds.PhoneTypeSeed(modelBuilder);
+
     }
 }
