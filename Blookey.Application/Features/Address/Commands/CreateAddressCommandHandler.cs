@@ -1,11 +1,12 @@
-﻿using Blookey.Application.Interfaces;
+﻿using Blookey.Application.Features.Address.Dtos;
+using Blookey.Application.Interfaces;
 using Blookey.Domain.Entities.Identity;
 using Blookey.Domain.Interfaces;
 using MediatR;
 
 namespace Blookey.Application.Features.Address.Commands;
 
-public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand, UserAddress>
+public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand, UserAddressDto>
 {
     private readonly IAddressRepository _addressRepository;
     private readonly IUnitOfWork _unitOfWork;   
@@ -18,21 +19,20 @@ public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand,
         _currentUser = currentUser;
     }
 
-    public async Task<UserAddress> Handle(CreateAddressCommand request, CancellationToken cancellationToken)
+    public async Task<UserAddressDto> Handle(CreateAddressCommand request, CancellationToken cancellationToken)
     {
-        var userAdress = new UserAddress
-        {
-            Address = request.Address,
-            AddressNumber = request.AddressNumber,
-            Complement = request.Complement,
-            Province = request.Province,
-            PostalCode = request.PostalCode,
-            UserId = _currentUser.Id
-        };
+        var userAddress = UserAddress.Create(
+            request.Address,
+            request.AddressNumber,
+            request.Complement,
+            request.Province,
+            request.PostalCode,
+            _currentUser.Id
+        );
 
-        await _addressRepository.AddAsync(userAdress, cancellationToken);
+        await _addressRepository.AddAsync(userAddress, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);  
 
-        return userAdress;
+        return UserAddressDto.FromEntity(userAddress);
     }
 }

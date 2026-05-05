@@ -2,8 +2,6 @@
 using Blookey.Infrastructure.Data.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -16,7 +14,7 @@ public static class IdentityServiceExtensions
         services
             .AddAuthentication(options =>
             {
-                // 👇Força JWT mesmo com AddIdentity configurado
+                // Força JWT mesmo com AddIdentity configurado
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;

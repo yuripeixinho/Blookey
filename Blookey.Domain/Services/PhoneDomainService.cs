@@ -1,4 +1,4 @@
-﻿using Blookey.Domain.Exceptions;
+﻿using Blookey.Domain.Common;
 using Blookey.Domain.Interfaces;
 
 namespace Blookey.Domain.Services;
@@ -12,11 +12,16 @@ public sealed class PhoneDomainService
         _phoneRepository = phoneRepository; 
     }
 
-    public async Task EnsurePhoneIsUniqueAsync(string phone, string userId, CancellationToken cancellationToken)
+    public async Task<Result> EnsurePhoneIsUniqueAsync(string phone, string userId, CancellationToken cancellationToken)
     {
         var exists = await _phoneRepository.ExistsAsync(phone, userId, cancellationToken);
 
         if (exists)
-            throw new DomainException("Este número de telefone já está cadastrado para o usuário.");
+            return Result.Failure(new Error(
+                    "Phone.Duplicate",
+                    "Este número de telefone já está cadastrado para o usuário.",
+                    ErrorType.Conflict));
+
+        return Result.Success();
     }
 }

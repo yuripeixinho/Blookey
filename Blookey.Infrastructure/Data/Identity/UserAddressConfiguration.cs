@@ -1,4 +1,5 @@
 ﻿using Blookey.Domain.Entities.Identity;
+using Blookey.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,7 +17,14 @@ public class UserAddressConfiguration : IEntityTypeConfiguration<UserAddress>
         builder.Property(x => x.AddressNumber).IsRequired().HasMaxLength(20);
         builder.Property(x => x.Complement).HasMaxLength(100);
         builder.Property(x => x.Province).IsRequired().HasMaxLength(100);
-        builder.Property(x => x.PostalCode).IsRequired().HasMaxLength(15);
+
+        builder.Property(x => x.PostalCode)
+            .HasConversion(
+                pc => pc.Value, // Converte PostalCode para string ao salvar no banco    
+                value => PostalCode.Create(value) // Converte string para PostalCode ao ler do banco
+            )
+            .IsRequired()
+            .HasMaxLength(8);
 
         builder.HasOne(x => x.User)
                 .WithMany(u => u.Addresses) // Conecta com a ICollection no User

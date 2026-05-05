@@ -14,5 +14,6 @@ public class PhoneValidator : AbstractValidator<CreatePhoneCommand>
 
         RuleFor(x => x.PhoneType)
             .NotEmpty().WithMessage("O tipo de telefone é obrigatório.");
+
     }  
 }

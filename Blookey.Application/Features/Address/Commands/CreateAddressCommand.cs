@@ -1,4 +1,4 @@
-﻿using Blookey.Domain.Entities.Identity;
+﻿using Blookey.Application.Features.Address.Dtos;
 using MediatR;
 
 namespace Blookey.Application.Features.Address.Commands;
@@ -9,4 +9,4 @@ public sealed record CreateAddressCommand(
     string? Complement, 
     string Province, 
     string PostalCode
-) : IRequest<UserAddress>;
+) : IRequest<UserAddressDto>;

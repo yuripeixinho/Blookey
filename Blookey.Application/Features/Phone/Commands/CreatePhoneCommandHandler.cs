@@ -1,5 +1,6 @@
 ﻿using Blookey.Application.Features.Phone.Dtos;
 using Blookey.Application.Interfaces;
+using Blookey.Domain.Common;
 using Blookey.Domain.Entities.Identity;
 using Blookey.Domain.Interfaces;
 using Blookey.Domain.Services;
@@ -7,7 +8,7 @@ using MediatR;
 
 namespace Blookey.Application.Features.Phone.Commands;
 
-public sealed class CreatePhoneCommandHandler : IRequestHandler<CreatePhoneCommand, UserPhoneDto>
+public sealed class CreatePhoneCommandHandler : IRequestHandler<CreatePhoneCommand, Result<UserPhoneDto>>
 {
     private readonly ICurrentUser _currentUser;
     private readonly IUnitOfWork _unitOfWork;
@@ -22,19 +23,22 @@ public sealed class CreatePhoneCommandHandler : IRequestHandler<CreatePhoneComma
         _domainService = domainService;
     }
 
-    public async Task<UserPhoneDto> Handle(CreatePhoneCommand request, CancellationToken cancellationToken)
+    public async Task<Result<UserPhoneDto>> Handle(CreatePhoneCommand request, CancellationToken cancellationToken)
     {
-        await _domainService.EnsurePhoneIsUniqueAsync(request.Phone, _currentUser.Id, cancellationToken);
+        var uniqueResult = await _domainService.EnsurePhoneIsUniqueAsync(request.Phone, _currentUser.Id, cancellationToken);
+
+        if (uniqueResult.IsFailure)
+            return Result.Failure<UserPhoneDto>(uniqueResult.Error);
 
         var userPhone = UserPhone.Create(
-            phone: request.Phone,
-            phoneTypeId: request.PhoneType, 
-            userId: _currentUser.Id
+            request.Phone,
+            request.PhoneType, 
+            _currentUser.Id
         );
 
         await _phoneRepository.AddAsync(userPhone, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return UserPhoneDto.FromEntity(userPhone);
+        return Result.Success(UserPhoneDto.FromEntity(userPhone));
     }
 }
