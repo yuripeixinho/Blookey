@@ -26,4 +26,9 @@ public class PhoneRepository : IPhoneRepository
 
         return await _context.UserPhones.AnyAsync(p => p.Phone == phoneVo && p.UserId == userId, cancellationToken);
     }
+
+    public async Task<UserPhone> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        return await _context.UserPhones.FirstOrDefaultAsync(p => p.UserId == userId, cancellationToken);  
+    }
 }

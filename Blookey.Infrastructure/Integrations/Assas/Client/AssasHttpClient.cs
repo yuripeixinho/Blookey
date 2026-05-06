@@ -23,7 +23,7 @@ public class AssasHttpClient
 
         Console.WriteLine($"[ASSAS ERROR] Status: {response.StatusCode} | Body: {body}");
 
-        throw response.StatusCode switch  // ← o throw precisa estar aqui fora
+        throw response.StatusCode switch 
         {
             HttpStatusCode.NotFound => new AssasNotFoundException(body),
             HttpStatusCode.BadRequest => new AssasBadRequestException(body),

@@ -1,6 +1,6 @@
 ﻿using Blookey.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
-
+ 
 namespace Blookey.Api.Extensions;
 
 public static class ResultExtensions

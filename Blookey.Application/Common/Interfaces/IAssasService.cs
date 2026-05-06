@@ -1,6 +1,8 @@
-﻿namespace Blookey.Application.Common.Interfaces;
+﻿using Blookey.Infrastructure.Integrations.Assas.Dtos;
+
+namespace Blookey.Application.Common.Interfaces;
 
 public interface IAssasSubaccountService
 {
-    Task CreateSubaccountAsync(string userId, string name, string email);
+    Task<CreateSubAccountResponse> CreateSubaccountAsync(CreateSubAccountRequest createSubAccountRequest);
 }

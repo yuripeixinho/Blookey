@@ -22,7 +22,7 @@ public class PhoneController : ApiControllerBase
         var result = await _mediator.Send(command);
 
         return result.IsSuccess
-            ? Results.Ok(result)
+            ? Results.Ok(result.Value)
             : result.ToProblemDetails();
     }
 }

@@ -15,6 +15,6 @@ public class CreateAssasCustomerSubAccountHandler : INotificationHandler<UserReg
 
     public async Task Handle(UserRegisteredEvent notification, CancellationToken cancellationToken)
     {
-        await _assasService.CreateSubaccountAsync(notification.UserId, notification.Name, notification.Email);    
+        throw new NotImplementedException();
     }
 }
