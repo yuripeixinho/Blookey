@@ -1,5 +1,4 @@
 ﻿using Blookey.Application.Common.Interfaces;
-using Blookey.Domain.Entities.Identity.Events;
 using MediatR;
 
 namespace Blookey.Application.Features.Identity.Events;

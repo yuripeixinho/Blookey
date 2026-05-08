@@ -1,6 +1,7 @@
 using Blookey.Api.Ioc;
 using Blookey.Api.Middlewares;
 using Blookey.Infrastructure.Extensions;
+using Blookey.Infrastructure.Integrations.Assas.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddFluentValidationConfiguration();
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddAssasIntegration(builder.Configuration);
 
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>

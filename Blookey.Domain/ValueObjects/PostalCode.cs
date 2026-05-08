@@ -5,7 +5,6 @@ namespace Blookey.Domain.ValueObjects;
 public sealed class PostalCode
 {
     public string Value { get; }
-
     private PostalCode(string value) => Value = value; // Ninguém de fora consegue fazer new PostalCode("..."). A única porta de entrada é o Create. Isso garante que nenhum PostalCode inválido pode existir — é impossível criar um sem passar pelas validações.
 
     public static PostalCode Create(string postalCode)

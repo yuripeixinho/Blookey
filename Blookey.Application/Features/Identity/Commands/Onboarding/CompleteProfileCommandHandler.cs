@@ -7,65 +7,67 @@ using MediatR;
 
 namespace Blookey.Application.Features.Identity.Commands.Onboarding;
 
-public class CompleteProfileCommandHandler : IRequestHandler<CompleteProfileCommand, Result<string>>
+public class CompleteProfileCommandHandler : IRequestHandler<CompleteProfileCommand, Result<CreateSubAccountResponse>>
 {
     private readonly ICurrentUser _currentUser;
+    private readonly IUserRepository _userRepository;
     private readonly IAddressRepository _addressRepository;
     private readonly IPhoneRepository _phoneRepository;
     private readonly IAssasSubaccountService _assasSubaccountService;
 
     public CompleteProfileCommandHandler(
         ICurrentUser currentUser, 
+        IUserRepository userRepository,
         IAddressRepository addressRepository, 
         IPhoneRepository phoneRepository, 
         IAssasSubaccountService assasSubaccountService)
     {
         _currentUser = currentUser;
+        _userRepository = userRepository;
         _addressRepository = addressRepository;
         _phoneRepository = phoneRepository;
         _assasSubaccountService = assasSubaccountService;
     }
 
-    public async Task<Result<string>> Handle(CompleteProfileCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CreateSubAccountResponse>> Handle(CompleteProfileCommand request, CancellationToken cancellationToken)
     {
         var address = await _addressRepository.GetByUserIdAsync(_currentUser.Id, cancellationToken);
+        if (address is null)
+            return Result.Failure<CreateSubAccountResponse>(new Error("Address.Missing", "O endereço do usuário é obrigatório para criar a subconta."));
+
         var phone = await _phoneRepository.GetByUserIdAsync(_currentUser.Id, cancellationToken);
+        if (phone is null)
+            return Result.Failure<CreateSubAccountResponse>(new Error("Phone.Missing", "O telefone do usuário é obrigatório."));
 
         var subAccountRequest = new CreateSubAccountRequest
         {
-            Name = "teste1",
-            Email = "teste1@exemplo.com",
-            LoginEmail = "teste1@exemplo.com",
-
-            CpfCnpj = "12345678909",
-            BirthDate = "1990-08-25",
-            Phone = "1133334444",
-            Site = "https://www.rodrigosilva.com.br",
-            IncomeValue = 15000,
-
-            Webhooks = new List<WebhookRequest>(),
-
-           //Name = _currentUser.Name,
-           //Email = _currentUser.Email,
-           //CpfCnpj = _currentUser.CpfCnpj,
-           //BirthDate = _currentUser.BirthDate,
-           MobilePhone = phone.Phone.Value,
-            //IncomeValue = request.IncomeValue,
-            //CompanyType = request.CompanyType,
-            //Site = request.Site,
+            Name = _currentUser.Name,
+            Email = _currentUser.Email,
+            LoginEmail = _currentUser.Email,
+            CpfCnpj = _currentUser.CpfCnpj,
+            IncomeValue = _currentUser.IncomeValue,
+            BirthDate = _currentUser.BirthDate,
+            MobilePhone = phone.Phone.Value,
             Address = address.Address,
             AddressNumber = address.AddressNumber,
             Complement = address.Complement,
             Province = address.Province,
-            PostalCode = address.PostalCode.Value
+            PostalCode = address.PostalCode.Value,
+
+            Webhooks = new List<WebhookRequest>(),
         };
 
-        var assasResponse = await _assasSubaccountService.CreateSubaccountAsync(subAccountRequest);
+        var assasResponse = await _assasSubaccountService.CreateSubaccountAsync(subAccountRequest, cancellationToken);
 
+        await _userRepository.UpdateOnboardingInfoAsync(
+            _currentUser.Id,
+            assasResponse.Id,
+            assasResponse.WalletId,
+            assasResponse.AccountNumber.Agency,
+            assasResponse.AccountNumber.Account,
+            assasResponse.AccountNumber.AccountDigit,
+            cancellationToken);
 
-
-        var teste = assasResponse;
-
-        throw new NotImplementedException();
+        return Result.Success(assasResponse);
     }
 }

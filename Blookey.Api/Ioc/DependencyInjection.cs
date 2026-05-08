@@ -6,8 +6,6 @@ using Blookey.Domain.Services;
 using Blookey.Infrastructure.Data.Context;
 using Blookey.Infrastructure.Data.Identity.Services;
 using Blookey.Infrastructure.Extensions;
-using Blookey.Infrastructure.Integrations.Assas.Client;
-using Blookey.Infrastructure.Integrations.Assas.Subaccounts;
 using Blookey.Infrastructure.Integrations.Email;
 using Blookey.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -32,17 +30,15 @@ public static class DependencyInjection
 
         // HTTPClients
         services.AddHttpContextAccessor();
-        services.AddHttpClient<AssasHttpClient>();
-        services.Configure<AssasClientOptions>(configuration.GetSection(AssasClientOptions.Section));
         services.AddScoped<ICurrentUser, CurrentUserService>();
 
         // Repositories
+        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAddressRepository, AddressRepository>();
         services.AddScoped<IPhoneRepository, PhoneRepository>();
 
         // Services
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IAssasSubaccountService, AssasSubaccountService>();
         services.AddScoped<IEmailService, EmailService>();
 
         // Services de domínio

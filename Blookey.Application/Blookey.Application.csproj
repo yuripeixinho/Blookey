@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Identity\Events\**" />
     <Compile Remove="Features\Identity\Rules\**" />
+    <EmbeddedResource Remove="Features\Identity\Events\**" />
     <EmbeddedResource Remove="Features\Identity\Rules\**" />
+    <None Remove="Features\Identity\Events\**" />
     <None Remove="Features\Identity\Rules\**" />
   </ItemGroup>
 	

@@ -4,8 +4,9 @@ namespace Blookey.Application.Features.Identity.Commands.Auth;
 
 public sealed record RegisterCommand(
     string Name,
-    string CPF,
+    string CpfCnpj,
     DateTime BirthDate,
+    decimal IncomeValue,
     string Email,
     string Password,
     string ConfirmPassword) : IRequest<string>;

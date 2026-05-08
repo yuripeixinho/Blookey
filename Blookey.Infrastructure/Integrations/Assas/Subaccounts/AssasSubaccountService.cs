@@ -13,7 +13,7 @@ public class AssasSubaccountService : IAssasSubaccountService
         _client = cliente;
     }
 
-    public async Task<CreateSubAccountResponse> CreateSubaccountAsync(CreateSubAccountRequest request)
+    public async Task<CreateSubAccountResponse> CreateSubaccountAsync(CreateSubAccountRequest request, CancellationToken ct)
     {
         var response = await _client.PostAsync<CreateSubAccountRequest, CreateSubAccountResponse>("accounts", request);
 

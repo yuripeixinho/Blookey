@@ -1,7 +1,7 @@
 ﻿using Blookey.Domain.Common;
+using Blookey.Infrastructure.Integrations.Assas.Dtos;
 using MediatR;
 
 namespace Blookey.Application.Features.Identity.Commands.Onboarding;
 
-// CompleteProfileCommand.cs
-public sealed record CompleteProfileCommand() : IRequest<Result<string>>;
+public sealed record CompleteProfileCommand : IRequest<Result<CreateSubAccountResponse>>;

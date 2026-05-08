@@ -44,9 +44,15 @@ public class AuthService : IAuthService
         // 1. Definir as Claims (Dados que vão dentro do Token)
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
-            new Claim(ClaimTypes.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Name, user.Name),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+
+            // Adicionando CPF como claim customizada, se necessário
+            new Claim("CpfCnpj", user.CpfCnpj.Value),
+            new Claim("BirthDate", user.BirthDate.ToString()),
+            new Claim("IncomeValue", user.IncomeValue.ToString(System.Globalization.CultureInfo.InvariantCulture))
         };
 
         // 2. Obter a chave secreta do appsettings.json
@@ -76,15 +82,12 @@ public class AuthService : IAuthService
     {
         // 1. PREPARAÇÃO DA ENTIDADE
         // Estamos mapeando os dados de entrada para a entidade do Identity.
-        var user = new User
-        {
-            CPF = req.CPF,
-            Name = req.Name,
-            UserName = req.Email,       // No Identity, UserName é o identificador de login. Usamos o email.
-            Email = req.Email,          // O email para contato/recuperação.
-           
-            SecurityStamp = Guid.NewGuid().ToString()  // SecurityStamp: Garante que se o usuário mudar dados sensíveis, tokens antigos morrem.
-        };
+        var user = User.Create(
+            req.Name,
+            req.CpfCnpj, 
+            req.BirthDate,
+            req.IncomeValue,
+            req.Email);
 
         // 2. A MÁGICA DO IDENTITY (CreateAsync)
         // Este único método faz 3 coisas sequenciais:

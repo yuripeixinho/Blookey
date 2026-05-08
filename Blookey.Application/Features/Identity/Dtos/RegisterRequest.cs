@@ -2,8 +2,9 @@
 
 public record RegisterRequest(
     string Name, 
-    string CPF, 
-    DateTime BirthDate, 
+    string CpfCnpj,
+    DateTime BirthDate,
+    decimal IncomeValue, 
     string Email, 
     string Password, 
     string ConfirmPassword

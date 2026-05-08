@@ -8,20 +8,19 @@ namespace Blookey.Application.Features.Identity.Commands.Auth;
 public class RegisterCommandHandler : IRequestHandler<RegisterCommand, string>
 {
     private readonly IAuthService _authService;
-    private readonly IPublisher _publisher;
 
-    public RegisterCommandHandler(IAuthService authService, IPublisher publisher)
+    public RegisterCommandHandler(IAuthService authService)
     {
         _authService = authService;
-        _publisher = publisher;
     }
 
     public async Task<string> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         var registerReq = new RegisterRequest(
             request.Name,
-            request.CPF,
+            request.CpfCnpj,
             request.BirthDate,
+            request.IncomeValue,
             request.Email,
             request.Password,
             request.ConfirmPassword

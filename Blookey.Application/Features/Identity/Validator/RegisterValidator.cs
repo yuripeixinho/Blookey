@@ -1,4 +1,5 @@
 ﻿using Blookey.Application.Common.Validation;
+using Blookey.Application.Common.Validation.Helpers;
 using Blookey.Application.Features.Identity.Commands.Auth;
 using FluentValidation;
 
@@ -12,14 +13,22 @@ public class RegisterValidator : AbstractValidator<RegisterCommand>
             .NotEmpty().WithMessage(GenericMessages.CampoObrigatorio("nome"))
             .MinimumLength(5).WithMessage(GenericMessages.TamanhoMinimo("nome", 5));
 
-        RuleFor(x => x.CPF)
-            .NotEmpty().WithMessage(GenericMessages.CampoObrigatorio("CPF"))
-            .Must(ValidarCpf).WithMessage(GenericMessages.FormatoInvalido("CPF"));
+        RuleFor(x => x.CpfCnpj)
+            .NotEmpty().WithMessage(GenericMessages.CampoObrigatorio("CPF/CNPJ"))
+            .Must(CpfCnpjValidator).WithMessage(GenericMessages.FormatoInvalido("CPF/CNPJ"));
 
         RuleFor(x => x.BirthDate)
-            .NotEmpty().WithMessage(GenericMessages.CampoObrigatorio("data de nascimento"))
-            .LessThan(DateTime.Now).WithMessage("A data de nascimento não pode ser no futuro.")
-            .Must(BeOver18).WithMessage("É necessário ter pelo menos 18 anos.");
+              .NotEmpty().WithMessage(GenericMessages.CampoObrigatorio("data de nascimento"))
+              .LessThan(DateTime.Now).WithMessage("A data de nascimento não pode ser no futuro.")
+              .Must(BeOver18).WithMessage("É necessário ter pelo menos 18 anos.");
+
+        RuleFor(x => x.IncomeValue)
+            .NotEmpty()
+                .WithMessage(GenericMessages.CampoObrigatorio("renda mensal"))
+            .GreaterThan(0)
+                .WithMessage("A renda mensal deve ser maior que zero.")
+            .PrecisionScale(18, 2, false)
+                .WithMessage("O valor da renda possui um formato inválido.");
 
         RuleFor(x => x.Email)
             .NotEmpty().WithMessage(GenericMessages.CampoObrigatorio("email"))
@@ -34,47 +43,19 @@ public class RegisterValidator : AbstractValidator<RegisterCommand>
             .Equal(x => x.Password).WithMessage(GenericMessages.DeveSerIgual("confirmação de senha", "senha"));
     }
 
-
-    private bool ValidarCpf(string cpf)
+    public bool CpfCnpjValidator(string documento)
     {
-        if (string.IsNullOrWhiteSpace(cpf)) return false;
+        if (string.IsNullOrWhiteSpace(documento)) return false;
 
-        // Remove caracteres não numéricos
-        cpf = new string(cpf.Where(char.IsDigit).ToArray());
+        // Remove qualquer caractere que não seja número
+        var numeros = new string(documento.Where(char.IsDigit).ToArray());
 
-        if (cpf.Length != 11) return false;
-
-        // Elimina CPFs com todos os números iguais (ex: 111.111.111-11)
-        if (new string(cpf[0], 11) == cpf) return false;
-
-        // Cálculo dos dígitos verificadores
-        int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-        int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-
-        string tempCpf = cpf.Substring(0, 9);
-        int soma = 0;
-
-        for (int i = 0; i < 9; i++)
-            soma += int.Parse(tempCpf[i].ToString()) * multiplicador1[i];
-
-        int resto = soma % 11;
-        if (resto < 2) resto = 0;
-        else resto = 11 - resto;
-
-        string digito = resto.ToString();
-        tempCpf = tempCpf + digito;
-        soma = 0;
-
-        for (int i = 0; i < 10; i++)
-            soma += int.Parse(tempCpf[i].ToString()) * multiplicador2[i];
-
-        resto = soma % 11;
-        if (resto < 2) resto = 0;
-        else resto = 11 - resto;
-
-        digito = digito + resto.ToString();
-
-        return cpf.EndsWith(digito);
+        return numeros.Length switch
+        {
+            11 => CpfValidator.Exec(numeros),
+            14 => CnpjValidator.Exec(numeros),
+            _ => false
+        };
     }
 
     private bool BeOver18(DateTime birthDate)
