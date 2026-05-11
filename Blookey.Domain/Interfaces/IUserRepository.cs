@@ -6,8 +6,10 @@ public interface IUserRepository
 {
     Task<User> GetByIdAsync(string userId, CancellationToken cancellationToken = default);
 
-    Task UpdateOnboardingInfoAsync(string userId,
+    Task UpdateOnboardingInfoAsync(
+    string userId,
     string assasId,
+    string accessTokenId,
     string walletId,
     string agency,
     string account,

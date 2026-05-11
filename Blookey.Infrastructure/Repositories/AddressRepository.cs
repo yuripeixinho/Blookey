@@ -1,18 +1,14 @@
 ﻿using Blookey.Domain.Entities.Identity;
 using Blookey.Domain.Interfaces;
 using Blookey.Infrastructure.Data.Context;
+using Blookey.Infrastructure.Exceptions.Semantics;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blookey.Infrastructure.Repositories;
 
-public class AddressRepository : IAddressRepository
+public class AddressRepository(BlookeyContext context) : IAddressRepository
 {
-    private readonly BlookeyContext _context;
-
-    public AddressRepository(BlookeyContext context)
-    {
-        _context = context; 
-    }
+    private readonly BlookeyContext _context = context;
 
     public async Task AddAsync(UserAddress address, CancellationToken cancellationToken = default)
     {
@@ -21,6 +17,7 @@ public class AddressRepository : IAddressRepository
 
     public async Task<UserAddress> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
     {
-        return await _context.UserAddresses.FirstOrDefaultAsync(u => u.UserId == userId, cancellationToken);
+        return await _context.UserAddresses.FirstOrDefaultAsync(u => u.UserId == userId, cancellationToken)
+            ?? throw new EntityRelationNotFoundException(nameof(UserAddress), nameof(User), userId);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Blookey.Infrastructure.Integrations.Assas.Dtos;
+﻿namespace Blookey.Application.Integrations.Assas.Dtos;
 
 public class CreateSubAccountResponse
 {
@@ -49,7 +49,7 @@ public class CreateSubAccountResponse
     /// <summary>
     /// Identificador único da cidade no Asaas
     /// </summary>
-    public int City { get; set; }
+    public int? City { get; set; }
 
     public string State { get; set; }
 
@@ -83,18 +83,18 @@ public class AccountNumberInfo
     public string AccountDigit { get; set; }
 }
 
-public class CommercialInfoExpiration
-{
-    public bool IsExpired { get; set; }
-    public DateTime? ScheduledDate { get; set; }
-}
-
 public class AccessTokenInfo
 {
     public string Id { get; set; }
     public string Name { get; set; }
     public bool Enabled { get; set; }
-    public DateTime? ExpirationDate { get; set; }
-    public DateTime DateCreated { get; set; }
+    public string? ExpirationDate { get; set; }
+    public string DateCreated { get; set; }
     public string? ProjectedExpirationDateByLackOfUse { get; set; }
+}
+
+public class CommercialInfoExpiration
+{
+    public bool IsExpired { get; set; }
+    public string? ScheduledDate { get; set; }
 }

@@ -1,5 +1,4 @@
-﻿using Blookey.Api.Extensions;
-using Blookey.Application.Features.Phone.Commands;
+﻿using Blookey.Application.Features.Phone.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +16,9 @@ public class PhoneController : ApiControllerBase
 
     [Authorize]
     [HttpPost("phone")]
-    public async Task<IResult> CreatePhone([FromBody] CreatePhoneCommand command)
+    public async Task<IActionResult> CreatePhone([FromBody] CreatePhoneCommand command)
     {
         var result = await _mediator.Send(command);
-
-        return result.IsSuccess
-            ? Results.Ok(result.Value)
-            : result.ToProblemDetails();
+        return HandleResult(result);
     }
 }

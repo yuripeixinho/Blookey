@@ -1,5 +1,4 @@
-﻿using Blookey.Api.Extensions;
-using Blookey.Application.Features.Identity.Commands.Auth;
+﻿using Blookey.Application.Features.Identity.Commands.Auth;
 using Blookey.Application.Features.Identity.Commands.Onboarding;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -33,13 +32,11 @@ public class AuthController : ApiControllerBase
 
     [Authorize]
     [HttpPost("assas-subaccount")]
-    public async Task<IResult> CompleteProfile()
+    public async Task<IActionResult> CompleteProfile()
     {
         var command = new CompleteProfileCommand();
         var result = await _mediator.Send(command);
 
-        return result.IsSuccess
-            ? Results.Ok(result)
-            : result.ToProblemDetails();
+        return HandleResult(result);
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Blookey.Infrastructure.Extensions;
+namespace Blookey.Api.Extensions;
 
 public static class IdentityServiceExtensions
 {

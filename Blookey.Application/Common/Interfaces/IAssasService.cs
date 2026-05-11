@@ -1,4 +1,4 @@
-﻿using Blookey.Infrastructure.Integrations.Assas.Dtos;
+﻿using Blookey.Application.Integrations.Assas.Dtos;
 
 namespace Blookey.Application.Common.Interfaces;
 

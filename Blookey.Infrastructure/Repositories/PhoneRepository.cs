@@ -2,18 +2,14 @@
 using Blookey.Domain.Interfaces;
 using Blookey.Domain.ValueObjects;
 using Blookey.Infrastructure.Data.Context;
+using Blookey.Infrastructure.Exceptions.Semantics;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blookey.Infrastructure.Repositories;
 
-public class PhoneRepository : IPhoneRepository
+public class PhoneRepository(BlookeyContext context) : IPhoneRepository
 {
-    private readonly BlookeyContext _context;
-
-    public PhoneRepository(BlookeyContext context)
-    {
-        _context = context;
-    }
+    private readonly BlookeyContext _context = context;
 
     public async Task AddAsync(UserPhone phone, CancellationToken cancellationToken = default)
     {
@@ -29,6 +25,7 @@ public class PhoneRepository : IPhoneRepository
 
     public async Task<UserPhone> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
     {
-        return await _context.UserPhones.FirstOrDefaultAsync(p => p.UserId == userId, cancellationToken);  
+        return await _context.UserPhones.FirstOrDefaultAsync(p => p.UserId == userId, cancellationToken) 
+            ?? throw new EntityRelationNotFoundException(nameof(UserPhone), nameof(User), userId);
     }
 }

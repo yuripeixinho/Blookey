@@ -2,7 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Blookey.Infrastructure.Extensions;
+namespace Blookey.Api.Extensions;
 
 public static class FluentValidationExtensions
 {

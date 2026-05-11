@@ -1,4 +1,4 @@
-﻿namespace Blookey.Infrastructure.Integrations.Assas.Dtos;
+﻿namespace Blookey.Application.Integrations.Assas.Dtos;
 
 
 public class CreateSubAccountRequest

@@ -1,13 +1,15 @@
-﻿using Blookey.Application.Common.Interfaces;
+﻿using Blookey.Api.Extensions;
+using Blookey.Application.Common.Interfaces;
 using Blookey.Application.Interfaces;
 using Blookey.Application.Services;
 using Blookey.Domain.Interfaces;
 using Blookey.Domain.Services;
 using Blookey.Infrastructure.Data.Context;
 using Blookey.Infrastructure.Data.Identity.Services;
-using Blookey.Infrastructure.Extensions;
 using Blookey.Infrastructure.Integrations.Email;
 using Blookey.Infrastructure.Repositories;
+using Blookey.Infrastructure.Security;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blookey.Api.Ioc;
@@ -25,8 +27,15 @@ public static class DependencyInjection
             );
         });
 
+        services.AddDataProtection()
+        .PersistKeysToFileSystem(new DirectoryInfo("/keys")) // ou Azure Blob, AWS, etc.
+        .SetApplicationName("Blookey");
+
         // Configuração de autenticação e autorização  
         services.AddIdentityConfiguration(configuration);
+
+        // Security
+        services.AddScoped<IAsaasKeyProtector, AsaasKeyProtector>();
 
         // HTTPClients
         services.AddHttpContextAccessor();

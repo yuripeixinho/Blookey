@@ -21,12 +21,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Exceptions\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\Blookey.Application\Blookey.Application.csproj" />
 	  <ProjectReference Include="..\Blookey.Application\Blookey.Application.csproj" />
 	  <ProjectReference Include="..\Blookey.Domain\Blookey.Domain.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Exceptions\Generics\" />
 	</ItemGroup>
 </Project>
